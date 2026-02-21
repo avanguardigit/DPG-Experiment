@@ -1,0 +1,67 @@
+{
+  "id": "FLR-001",
+  "ean": "8012345000301",
+  "name": "Farina d'Avena Proteica",
+  "category": "flours",
+  "weight_g": 1000,
+  "price": 8.99,
+  "status": "available",
+
+  "description": {
+    "short": "Avena integrale macinata fine + whey isolate. Due ingredienti, massima versatilità. 28g proteine/100g.",
+    "long": "Farina d'avena integrale arricchita con proteine isolate del siero del latte. Il doppio delle proteine rispetto alla farina d'avena standard. Macinatura fine adatta sia per impasti (pancake, muffin, pane) sia da sciogliere in liquidi (smoothie, porridge, shake). Non è un preparato per pancake con 15 ingredienti: è farina d'avena + whey.",
+    "founder_note": null
+  },
+
+  "ingredients": "Farina d'avena integrale 75%, proteine isolate del siero del latte 25%.",
+
+  "allergens": {
+    "contains": ["glutine", "latte"],
+    "may_contain": ["soia", "frutta a guscio", "arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 370, "energy_kj": 1565,
+      "fat_g": 7.5, "saturated_fat_g": 1.5,
+      "carbs_g": 42.0, "sugars_g": 1.2,
+      "fiber_g": 8.0, "protein_g": 28.0, "salt_g": 0.05
+    },
+    "per_unit": {
+      "unit_label": "per porzione (40g)",
+      "energy_kcal": 148, "energy_kj": 626,
+      "fat_g": 3.0, "saturated_fat_g": 0.6,
+      "carbs_g": 16.8, "sugars_g": 0.5,
+      "fiber_g": 3.2, "protein_g": 11.2, "salt_g": 0.02
+    }
+  },
+
+  "serving_size_g": 40,
+  "serving_note": "circa 3 cucchiai colmi",
+
+  "usage_tips": [
+    "Pancake proteici: 40g farina + 1 uovo + 50ml latte + sale. 2-3 pancake con ~20g proteine.",
+    "Porridge proteico: 40g in 150ml latte caldo, riposa 2 min. Aggiungere frutta e crema DPG.",
+    "Smoothie: 20-30g nel frullato per aumentare proteine e densità.",
+    "Sostituzione in ricette: fino al 50% della farina tradizionale. +10-15% liquidi.",
+    "NON sostituire il 100% della farina 00 in ricette lievitate — risultato denso e piatto.",
+    "NON usarla per pasta fresca — texture non adatta."
+  ],
+
+  "comparison_vs_standard": {
+    "dpg_protein_per_100g": 28,
+    "standard_protein_per_100g": 13,
+    "dpg_fiber_per_100g": 8,
+    "standard_fiber_per_100g": 10,
+    "dpg_carbs_per_100g": 42,
+    "standard_carbs_per_100g": 62
+  },
+
+  "storage": "Richiudere bene dopo l'uso. Luogo fresco e asciutto. Dopo apertura, consumare entro 3 mesi.",
+  "shelf_life_months": 18,
+
+  "related_products": ["FLR-002", "FLR-003", "SPR-001", "BAR-C-001"],
+  "related_recipes": ["pancake-proteico", "overnight-oats", "banana-bread", "energy-balls"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

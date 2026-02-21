@@ -1,0 +1,65 @@
+{
+  "id": "SPR-001",
+  "ean": "8012345000401",
+  "name": "Crema di Arachidi Smooth",
+  "category": "spreads",
+  "weight_g": 400,
+  "price": 6.99,
+  "status": "available",
+
+  "description": {
+    "short": "Arachidi tostate 99% + sale marino. Consistenza liscia e cremosa. 28g proteine/100g.",
+    "long": "Arachidi tostate. Sale. Fine dell'elenco ingredienti. Tostatura lenta a bassa temperatura per sapore profondo senza bruciare gli oli naturali. Consistenza completamente liscia — perfetta da spalmare, mescolare in smoothie, usare in salse e condimenti. Niente olio di palma, zucchero aggiunto o emulsionanti.",
+    "founder_note": null
+  },
+
+  "ingredients": "Arachidi tostate 99%, sale marino.",
+
+  "allergens": {
+    "contains": ["arachidi"],
+    "may_contain": ["frutta a guscio", "sesamo"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 614, "energy_kj": 2528,
+      "fat_g": 50.0, "saturated_fat_g": 8.0,
+      "carbs_g": 8.0, "sugars_g": 4.0,
+      "fiber_g": 8.5, "protein_g": 28.0, "salt_g": 0.8
+    },
+    "per_unit": {
+      "unit_label": "per porzione (20g)",
+      "energy_kcal": 123, "energy_kj": 506,
+      "fat_g": 10.0, "saturated_fat_g": 1.6,
+      "carbs_g": 1.6, "sugars_g": 0.8,
+      "fiber_g": 1.7, "protein_g": 5.6, "salt_g": 0.16
+    },
+    "lipid_profile_per_100g": {
+      "monounsaturated_g": 25.0,
+      "polyunsaturated_g": 14.0,
+      "saturated_g": 8.0,
+      "omega6_g": 13.5
+    }
+  },
+
+  "serving_size_g": 20,
+  "serving_note": "1 cucchiaio colmo — circa 20 porzioni per vasetto",
+
+  "usage_tips": [
+    "Su pane o fette biscottate: aggiungi banana a fette e miele per colazione perfetta.",
+    "Nei frullati: 20g aggiungono cremosità, proteine e grassi buoni.",
+    "Come dip thai: mescola con salsa di soia e lime per verdure crude.",
+    "In cottura: base per salse satay, pad thai, glassa per carni.",
+    "Sulla ProBar: spalma sulla barretta spezzata per ~25g di proteine.",
+    "Nel porridge: un cucchiaio nel porridge caldo.",
+    "NOTA: è normale che l'olio si separi in superficie. Mescolare prima dell'uso. Conservare capovolto per rallentare la separazione."
+  ],
+
+  "storage": "Temperatura ambiente, NON refrigerare (diventa troppo dura). Luogo fresco e asciutto. Dopo apertura, consumare entro 3 mesi.",
+  "shelf_life_months": 12,
+
+  "related_products": ["SPR-002", "SPR-003", "FLR-001", "BAR-V-001"],
+  "related_recipes": ["pancake-proteico", "energy-balls", "overnight-oats"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

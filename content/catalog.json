@@ -1,0 +1,82 @@
+{
+  "brand": {
+    "name": "DPG Nutrition",
+    "full_name": "Dynamic Performance Growth Nutrition",
+    "tagline": "Energia vera, ogni giorno.",
+    "founded": 2019,
+    "headquarters": "Parma, Italia",
+    "currency": "EUR",
+    "vat_included": true
+  },
+  "categories": [
+    {
+      "id": "bars",
+      "name": "Barrette Proteiche",
+      "slug": "barrette",
+      "description": "Snack proteici bilanciati per sportivi e chi vuole uno spuntino sano.",
+      "lines": [
+        {
+          "id": "bars-classic",
+          "name": "ProBar Classic",
+          "type": "classic",
+          "tagline": "Proteine del siero del latte, gusto e performance.",
+          "protein_claim": "20g per barretta",
+          "weight_g": 60,
+          "file": "products/bars-classic.md",
+          "products": [
+            { "id": "BAR-C-001", "name": "Cioccolato Fondente", "price": 2.49, "price_box_12": 24.99, "bestseller": true, "file": "products/bar-c-001.md" },
+            { "id": "BAR-C-002", "name": "Nocciola Crunch", "price": 2.49, "price_box_12": 24.99, "bestseller": false, "file": "products/bar-c-002.md" },
+            { "id": "BAR-C-003", "name": "Cocco & Mandorla", "price": 2.49, "price_box_12": 24.99, "bestseller": false, "file": "products/bar-c-003.md" }
+          ]
+        },
+        {
+          "id": "bars-vegan",
+          "name": "ProBar Plant",
+          "type": "vegan",
+          "tagline": "100% vegetale, zero compromessi.",
+          "protein_claim": "16g per barretta",
+          "weight_g": 55,
+          "certifications": ["vegan", "senza lattosio"],
+          "file": "products/bars-vegan.md",
+          "products": [
+            { "id": "BAR-V-001", "name": "Cacao & Datteri", "price": 2.79, "price_box_12": 27.99, "bestseller": true, "file": "products/bar-v-001.md" },
+            { "id": "BAR-V-002", "name": "Pistacchio & Limone", "price": 2.99, "price_box_12": 29.99, "bestseller": false, "file": "products/bar-v-002.md" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flours",
+      "name": "Farine Proteiche",
+      "slug": "farine",
+      "description": "Farine funzionali per ricette sane e ricche di proteine.",
+      "products": [
+        { "id": "FLR-001", "name": "Farina d'Avena Proteica", "price": 8.99, "weight_g": 1000, "file": "products/flr-001.md" },
+        { "id": "FLR-002", "name": "Farina di Riso Integrale", "price": 7.99, "weight_g": 1000, "file": "products/flr-002.md" },
+        { "id": "FLR-003", "name": "Farina Multicereali Sport", "price": 9.99, "weight_g": 1000, "file": "products/flr-003.md" }
+      ]
+    },
+    {
+      "id": "spreads",
+      "name": "Creme Proteiche",
+      "slug": "creme",
+      "description": "Creme spalmabili naturali ad alto contenuto proteico.",
+      "products": [
+        { "id": "SPR-001", "name": "Crema di Arachidi Smooth", "price": 6.99, "weight_g": 400, "file": "products/spr-001.md" },
+        { "id": "SPR-002", "name": "Crema di Arachidi Crunchy", "price": 6.99, "weight_g": 400, "file": "products/spr-002.md" },
+        { "id": "SPR-003", "name": "Crema di Mandorle", "price": 8.99, "weight_g": 300, "file": "products/spr-003.md" }
+      ]
+    }
+  ],
+  "content_files": {
+    "about": "brand/about.md",
+    "mission": "brand/mission.md",
+    "faq": "brand/faq.md",
+    "brand_guidelines": "system/brand-guidelines.md",
+    "interaction_rules": "system/interaction-rules.md",
+    "sitemap": "system/sitemap.md",
+    "recipes_index": "recipes/index.md"
+  },
+  "total_products": 11,
+  "last_updated": "2026-02-01"
+}

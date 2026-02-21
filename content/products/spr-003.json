@@ -1,0 +1,89 @@
+{
+  "id": "SPR-003",
+  "ean": "8012345000403",
+  "name": "Crema di Mandorle",
+  "category": "spreads",
+  "weight_g": 300,
+  "price": 8.99,
+  "status": "available",
+
+  "description": {
+    "short": "Mandorle italiane pelate e tostate 99,5% + sale marino. Consistenza setosa. 25g proteine/100g.",
+    "long": "Mandorle italiane (Puglia e Sicilia) pelate, leggermente tostate e macinate fino a consistenza setosa. Sapore più delicato e dolce rispetto alle creme di arachidi, con nota di burro naturale. Vasetto da 300g (non 400g) perché le mandorle costano di più — abbiamo preferito qualità alta con formato più piccolo. Filiera più corta del catalogo DPG.",
+    "founder_note": null
+  },
+
+  "ingredients": "Mandorle pelate tostate 99,5%, sale marino.",
+
+  "allergens": {
+    "contains": ["frutta a guscio (mandorle)"],
+    "may_contain": ["arachidi", "sesamo", "altri tipi di frutta a guscio"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 625, "energy_kj": 2570,
+      "fat_g": 53.0, "saturated_fat_g": 4.0,
+      "carbs_g": 6.5, "sugars_g": 3.5,
+      "fiber_g": 9.0, "protein_g": 25.0, "salt_g": 0.5
+    },
+    "per_unit": {
+      "unit_label": "per porzione (20g)",
+      "energy_kcal": 125, "energy_kj": 514,
+      "fat_g": 10.6, "saturated_fat_g": 0.8,
+      "carbs_g": 1.3, "sugars_g": 0.7,
+      "fiber_g": 1.8, "protein_g": 5.0, "salt_g": 0.1
+    },
+    "lipid_profile_per_100g": {
+      "monounsaturated_g": 33.0,
+      "polyunsaturated_g": 12.0,
+      "saturated_g": 4.0
+    },
+    "micronutrients_per_100g": {
+      "vitamin_e_mg": 25,
+      "vitamin_e_vnr_pct": 208,
+      "magnesium_mg": 270,
+      "magnesium_vnr_pct": 72,
+      "calcium_mg": 265,
+      "calcium_vnr_pct": 33,
+      "iron_mg": 3.7,
+      "iron_vnr_pct": 26
+    }
+  },
+
+  "serving_size_g": 20,
+  "serving_note": "1 cucchiaio colmo — circa 15 porzioni per vasetto",
+
+  "comparison_vs_peanut": {
+    "almond_protein": 25,
+    "peanut_protein": 28,
+    "almond_saturated_fat": 4,
+    "peanut_saturated_fat": 8,
+    "almond_vitamin_e": 25,
+    "peanut_vitamin_e": 8,
+    "almond_magnesium": 270,
+    "peanut_magnesium": 170,
+    "almond_taste": "Delicato, dolce, burroso",
+    "peanut_taste": "Intenso, tostato, deciso",
+    "almond_price_per_100g": 3.00,
+    "peanut_price_per_100g": 1.75
+  },
+
+  "usage_tips": [
+    "Colazione premium: su pane tostato con miele e fichi, o su pancake con frutti di bosco.",
+    "Smoothie delicato: 20g + banana + latte di mandorla + ghiaccio.",
+    "Condimento per insalate: diluisci con olio d'oliva e limone.",
+    "Con frutta: un cucchiaio con mela a fette o pera.",
+    "In pasticceria: base per creme, glasse e farciture. Si sposa con miele, vaniglia e agrumi.",
+    "Nel caffè: un cucchiaino per un almond latte naturale.",
+    "Ideale per chi è allergico alle arachidi ma vuole una crema di frutta secca."
+  ],
+
+  "storage": "Temperatura ambiente, non refrigerare. Mescolare se l'olio si separa. Dopo apertura, consumare entro 3 mesi.",
+  "shelf_life_months": 12,
+
+  "related_products": ["SPR-001", "BAR-C-003", "BAR-V-002", "FLR-002"],
+  "related_recipes": ["overnight-oats", "banana-bread"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

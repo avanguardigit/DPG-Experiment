@@ -1,0 +1,73 @@
+{
+  "id": "BAR-V-001",
+  "ean": "8012345000201",
+  "name": "ProBar Plant Cacao & Datteri",
+  "line": "ProBar Plant",
+  "category": "bars",
+  "type": "vegan",
+  "flavor": "Cacao & Datteri",
+  "weight_g": 55,
+  "price": 2.79,
+  "price_box_12": 27.99,
+  "status": "available",
+  "is_bestseller": true,
+  "bestseller_note": "Bestseller della linea Plant",
+  "certifications_product": ["V-Label (vegano)", "senza lattosio", "soia-free nella formulazione"],
+
+  "description": {
+    "short": "Barretta 100% vegetale con datteri Deglet Nour e cacao amaro. 16g di proteine.",
+    "long": "I datteri Deglet Nour forniscono dolcezza naturale e texture morbida, il cacao amaro bilancia con profondità. Durante i test, il 73% dei tester onnivori l'ha preferita alla versione whey. La copertura fondente è fatta con pasta di cacao, burro di cacao e zucchero di cocco — niente lecitina di soia.",
+    "founder_note": null
+  },
+
+  "ingredients": "Miscela proteica vegetale (proteina isolata di pisello, proteina di riso integrale), pasta di datteri 15%, sciroppo di riso, copertura fondente (pasta di cacao, burro di cacao, zucchero di cocco), cacao in polvere 5%, olio di cocco, fibre di acacia, aromi naturali, sale.",
+
+  "allergens": {
+    "contains": [],
+    "may_contain": ["frutta a guscio", "arachidi", "soia"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 348, "energy_kj": 1457,
+      "fat_g": 10.5, "saturated_fat_g": 5.0,
+      "carbs_g": 36.0, "sugars_g": 20.0,
+      "fiber_g": 7.0, "protein_g": 29.1, "salt_g": 0.5
+    },
+    "per_unit": {
+      "unit_label": "per barretta (55g)",
+      "energy_kcal": 191, "energy_kj": 801,
+      "fat_g": 5.8, "saturated_fat_g": 2.8,
+      "carbs_g": 19.8, "sugars_g": 11.0,
+      "fiber_g": 3.9, "protein_g": 16.0, "salt_g": 0.28
+    },
+    "amino_acids_per_unit": {
+      "leucine_g": 1.3, "isoleucine_g": 0.7, "valine_g": 0.8,
+      "bcaa_total_g": 2.8, "arginine_g": 1.4
+    }
+  },
+
+  "protein_source_info": "Miscela 70:30 proteina di pisello isolata e proteina di riso integrale. Profilo aminoacidico completo, paragonabile al whey.",
+
+  "usage_tips": [
+    "Pre-workout leggero (45 min prima): digestione più leggera rispetto al whey.",
+    "Snack da ufficio: fibre di acacia + datteri danno sazietà prolungata.",
+    "Recovery dopo yoga/pilates: 16g di proteine sufficienti per attività a bassa-media intensità.",
+    "Spuntino pomeriggio: il cacao stimola leggermente senza crash della caffeina."
+  ],
+
+  "why_choose_this": [
+    "Sei vegano o intollerante al lattosio",
+    "Preferisci digestione più leggera prima dell'attività",
+    "Vuoi evitare la soia (questa è soia-free nella formulazione)",
+    "Preferisci dolcezza naturale (datteri e zucchero di cocco vs sciroppo di glucosio)"
+  ],
+
+  "storage": "Conservare in luogo fresco e asciutto (15-25°C). La pasta di datteri può rendere la barretta più morbida col caldo — è normale.",
+  "shelf_life_months": 12,
+
+  "related_products": ["BAR-V-002", "BAR-C-001", "SPR-001", "FLR-001"],
+  "related_recipes": ["pancake-proteico", "energy-balls"],
+
+  "certifications": ["ISO 22000", "V-Label", "Reg. UE 1169/2011", "Analisi laboratorio indipendente"]
+}

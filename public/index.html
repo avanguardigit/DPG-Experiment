@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DPG Nutrition — Energia vera, ogni giorno.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dpg:       { DEFAULT: '#2D6A4F', dark: '#1B4332', light: '#D8F3DC', mid: '#40916C', accent: '#52B788' },
+            warm:      '#FEFAE0',
+            earth:     '#6B4226',
+            gold:      '#E9C46A',
+            alert:     '#E63946',
+            cat:       { classic: '#5C3D2E', plant: '#40916C', flour: '#DDA15E', spread: '#BC6C25' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Solo ciò che Tailwind non copre: animazioni shell */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #shell-loader .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid #D8F3DC;
+      border-top-color: #2D6A4F;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    #shell-loader { transition: opacity .3s; }
+    #content.fade-enter { opacity: 0; transform: translateY(8px); }
+    #content.fade-active { transition: opacity .35s, transform .35s; opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="bg-warm text-dpg-dark font-sans min-h-screen flex flex-col">
+
+  <!-- ============ HEADER ============ -->
+  <header id="shell-header" class="bg-dpg-dark text-white px-6 h-16 flex items-center justify-between sticky top-0 z-50 shrink-0">
+    <div id="shell-logo" onclick="navigate('home')" class="text-xl font-bold tracking-tight cursor-pointer hover:opacity-80 transition-opacity">
+      <span class="text-dpg-accent">DPG</span> Nutrition
+    </div>
+    <nav id="shell-nav" class="hidden md:flex gap-8">
+      <a onclick="navigate('catalogo completo prodotti DPG Nutrition')" class="text-white/80 hover:text-white text-sm font-medium cursor-pointer transition-colors">Prodotti</a>
+      <a onclick="navigate('sezione ricette con prodotti DPG Nutrition')" class="text-white/80 hover:text-white text-sm font-medium cursor-pointer transition-colors">Ricette</a>
+      <a onclick="navigate('chi siamo, storia e mission di DPG Nutrition')" class="text-white/80 hover:text-white text-sm font-medium cursor-pointer transition-colors">Chi Siamo</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <input type="text" id="shell-search-input" placeholder="Cerca..."
+        aria-label="Cerca nel sito"
+        class="bg-white/10 border border-white/20 rounded-md px-3 py-1.5 text-sm text-white placeholder-white/40 w-48 md:w-52 outline-none focus:border-dpg-accent focus:bg-white/15 transition">
+      <button id="shell-search-btn" aria-label="Cerca"
+        class="bg-dpg text-white rounded-md px-3 py-1.5 text-sm cursor-pointer hover:bg-dpg-mid transition-colors">&#x2315;</button>
+    </div>
+  </header>
+
+  <!-- ============ CONTENT ============ -->
+  <main id="content" class="flex-1 w-full max-w-6xl mx-auto px-6 py-8"></main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="shell-footer" class="bg-dpg-dark text-white/50 text-center px-6 py-5 text-xs leading-relaxed shrink-0">
+    <strong class="text-white/75">DPG Nutrition S.r.l.</strong> — Parma, Italia<br>
+    Questo è un sito dimostrativo — DPG Nutrition è un brand fittizio.<br>
+    I valori nutrizionali possono variare. Consultare un professionista.
+  </footer>
+
+  <!-- ============ LOADER ============ -->
+  <div id="shell-loader" class="fixed inset-0 bg-warm/90 flex flex-col items-center justify-center z-[100] opacity-0 pointer-events-none">
+    <div class="spinner"></div>
+    <p id="shell-loader-text" class="mt-4 text-dpg font-medium text-sm">Generazione in corso...</p>
+    <p id="shell-loader-timer" class="mt-2 text-dpg-mid/60 text-xs font-mono tabular-nums">0.0s</p>
+  </div>
+
+  <!-- ============ HOME PAGE STATICA ============ -->
+  <template id="home-template">
+    <section class="text-center pt-20 pb-12 px-4">
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-dpg-dark mb-3">DPG Nutrition</h1>
+      <p class="text-lg text-dpg-accent font-medium mb-10">Energia vera, ogni giorno.</p>
+      <a data-navigate="catalogo completo prodotti DPG Nutrition"
+        class="inline-block bg-dpg text-white px-8 py-3 rounded-lg font-semibold hover:bg-dpg-mid hover:-translate-y-0.5 transition-all cursor-pointer">
+        Scopri i prodotti
+      </a>
+    </section>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-3xl mx-auto mb-16">
+      <a data-navigate="barrette proteiche DPG Nutrition — linea Classic e Plant"
+        class="bg-white rounded-xl p-8 text-center cursor-pointer no-underline text-inherit border border-dpg/5 hover:-translate-y-1 hover:shadow-lg hover:shadow-dpg-dark/10 transition-all">
+        <span class="text-4xl block mb-3">🍫</span>
+        <h3 class="text-base font-bold mb-1">Barrette Proteiche</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Classic e Plant — fino a 20g di proteine per barretta.</p>
+      </a>
+      <a data-navigate="farine proteiche DPG Nutrition per ricette sane"
+        class="bg-white rounded-xl p-8 text-center cursor-pointer no-underline text-inherit border border-dpg/5 hover:-translate-y-1 hover:shadow-lg hover:shadow-dpg-dark/10 transition-all">
+        <span class="text-4xl block mb-3">🌾</span>
+        <h3 class="text-base font-bold mb-1">Farine Proteiche</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Avena, riso integrale, multicereali. La base per ogni ricetta.</p>
+      </a>
+      <a data-navigate="creme proteiche spalmabili DPG Nutrition"
+        class="bg-white rounded-xl p-8 text-center cursor-pointer no-underline text-inherit border border-dpg/5 hover:-translate-y-1 hover:shadow-lg hover:shadow-dpg-dark/10 transition-all">
+        <span class="text-4xl block mb-3">🥜</span>
+        <h3 class="text-base font-bold mb-1">Creme Spalmabili</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Arachidi e mandorle. Naturali, senza zuccheri aggiunti.</p>
+      </a>
+    </div>
+
+    <section class="text-center pb-16 px-4">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-5">Esplora</h2>
+      <div class="flex justify-center gap-3 flex-wrap">
+        <a data-navigate="ricette facili e veloci con prodotti DPG Nutrition" class="bg-dpg-light text-dpg-dark px-5 py-2 rounded-full text-sm font-medium cursor-pointer hover:bg-dpg-accent/30 hover:-translate-y-0.5 transition-all">Ricette</a>
+        <a data-navigate="prodotti bestseller DPG Nutrition" class="bg-dpg-light text-dpg-dark px-5 py-2 rounded-full text-sm font-medium cursor-pointer hover:bg-dpg-accent/30 hover:-translate-y-0.5 transition-all">Bestseller</a>
+        <a data-navigate="chi siamo, storia e mission di DPG Nutrition" class="bg-dpg-light text-dpg-dark px-5 py-2 rounded-full text-sm font-medium cursor-pointer hover:bg-dpg-accent/30 hover:-translate-y-0.5 transition-all">La nostra storia</a>
+        <a data-navigate="domande frequenti su DPG Nutrition" class="bg-dpg-light text-dpg-dark px-5 py-2 rounded-full text-sm font-medium cursor-pointer hover:bg-dpg-accent/30 hover:-translate-y-0.5 transition-all">FAQ</a>
+      </div>
+    </section>
+  </template>
+
+  <!-- ============ JAVASCRIPT ============ -->
+  <script>
+    const contentEl = document.getElementById('content');
+    const loaderEl = document.getElementById('shell-loader');
+    const loaderText = document.getElementById('shell-loader-text');
+    const loaderTimer = document.getElementById('shell-loader-timer');
+    const searchInput = document.getElementById('shell-search-input');
+    const searchBtn = document.getElementById('shell-search-btn');
+    const homeHTML = document.getElementById('home-template').innerHTML;
+
+    const pageCache = new Map();
+    pageCache.set('home', homeHTML);
+
+    let currentIntent = null;
+    let generating = false;
+
+    // ------ User journey tracking ------
+
+    const userJourney = [];
+    const MAX_JOURNEY = 20;
+
+    function trackIntent(intent) {
+      if (intent === 'home') return;
+      userJourney.push({ intent, ts: Date.now() });
+      if (userJourney.length > MAX_JOURNEY) userJourney.shift();
+    }
+
+    function getJourneyForApi() {
+      if (userJourney.length === 0) return undefined;
+      return userJourney.map(j => j.intent);
+    }
+
+    // ------ Navigation ------
+
+    async function navigate(intent, pushHistory = true) {
+      if (!intent || generating) return;
+      intent = intent.trim();
+      currentIntent = intent;
+
+      trackIntent(intent);
+
+      if (pageCache.has(intent)) {
+        injectContent(pageCache.get(intent));
+        if (pushHistory) pushState(intent);
+        return;
+      }
+
+      showLoader(true, 'Generazione in corso...');
+      generating = true;
+
+      try {
+        const body = { intent };
+        const journey = getJourneyForApi();
+        if (journey) body.journey = journey;
+
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          throw new Error(data.error || 'Errore sconosciuto');
+        }
+
+        pageCache.set(intent, data.html);
+        injectContent(data.html);
+        if (pushHistory) pushState(intent);
+      } catch (err) {
+        injectContent(errorPage(err.message, intent));
+      } finally {
+        generating = false;
+        showLoader(false);
+      }
+    }
+
+    // ------ DOM helpers ------
+
+    function injectContent(html) {
+      contentEl.classList.remove('fade-active');
+      contentEl.classList.add('fade-enter');
+      contentEl.innerHTML = html;
+      window.scrollTo({ top: 0, behavior: 'instant' });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          contentEl.classList.remove('fade-enter');
+          contentEl.classList.add('fade-active');
+        });
+      });
+    }
+
+    function pushState(intent) {
+      const hash = intent === 'home' ? '' : '#' + encodeURIComponent(intent);
+      history.pushState({ intent }, '', '/' + hash);
+    }
+
+    function errorPage(msg, failedIntent) {
+      return `<div class="text-center py-16 px-8">
+        <h2 class="text-alert text-xl font-bold mb-3">Qualcosa è andato storto</h2>
+        <p class="text-gray-500 mb-6">${msg}</p>
+        <button onclick="navigate('${failedIntent.replace(/'/g, "\\'")}')"
+          class="bg-dpg text-white px-6 py-2.5 rounded-lg font-semibold cursor-pointer hover:bg-dpg-mid transition-colors">Riprova</button>
+      </div>`;
+    }
+
+    // ------ Loader with timer ------
+
+    let loaderInterval = null;
+    let loaderStart = 0;
+
+    function showLoader(show, text) {
+      if (show) {
+        if (text) loaderText.textContent = text;
+        loaderEl.style.opacity = '1';
+        loaderEl.style.pointerEvents = 'all';
+        if (!loaderInterval) {
+          loaderStart = Date.now();
+          loaderTimer.textContent = '0.0s';
+          loaderInterval = setInterval(() => {
+            const elapsed = ((Date.now() - loaderStart) / 1000).toFixed(1);
+            loaderTimer.textContent = elapsed + 's';
+          }, 100);
+        }
+      } else {
+        loaderEl.style.opacity = '0';
+        loaderEl.style.pointerEvents = 'none';
+        if (loaderInterval) {
+          clearInterval(loaderInterval);
+          loaderInterval = null;
+        }
+      }
+    }
+
+    // ------ Event delegation for data-navigate ------
+
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-navigate]');
+      if (link) {
+        e.preventDefault();
+        navigate(link.dataset.navigate);
+      }
+    });
+
+    // ------ Search ------
+
+    function doSearch() {
+      const q = searchInput.value.trim();
+      if (q) {
+        navigate('ricerca: ' + q);
+        searchInput.value = '';
+        searchInput.blur();
+      }
+    }
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') doSearch();
+    });
+    searchBtn.addEventListener('click', doSearch);
+
+    // ------ History API ------
+
+    window.addEventListener('popstate', (e) => {
+      if (e.state?.intent) {
+        navigate(e.state.intent, false);
+      } else {
+        navigate('home', false);
+      }
+    });
+
+    // ------ Boot ------
+
+    (function boot() {
+      const hash = decodeURIComponent(location.hash.slice(1));
+      if (hash) {
+        navigate(hash, false);
+      } else {
+        injectContent(homeHTML);
+      }
+      history.replaceState({ intent: hash || 'home' }, '', location.href);
+    })();
+  </script>
+</body>
+</html>

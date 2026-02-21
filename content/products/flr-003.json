@@ -1,0 +1,71 @@
+{
+  "id": "FLR-003",
+  "ean": "8012345000303",
+  "name": "Farina Multicereali Sport",
+  "category": "flours",
+  "weight_g": 1000,
+  "price": 9.99,
+  "status": "available",
+
+  "description": {
+    "short": "4 cereali + whey + semi di lino. Farina premium con 30g proteine/100g, fibre e omega-3.",
+    "long": "Farina premium che combina avena, farro, segale e orzo con proteine del siero del latte e semi di lino macinati per omega-3. Profilo nutrizionale complesso: più proteine, più fibre, più micronutrienti di qualsiasi farina singola. Sapore rustico e ricco con nota di nocciola dal farro e dalla segale tostata. Per chi cucina con intenzione.",
+    "founder_note": null
+  },
+
+  "ingredients": "Farina d'avena integrale 30%, farina di farro integrale 18%, farina di segale integrale 10%, farina d'orzo 7%, proteine concentrate del siero del latte 25%, semi di lino macinati 8%, sale 0,3%.",
+
+  "allergens": {
+    "contains": ["glutine (avena, farro, segale, orzo)", "latte"],
+    "may_contain": ["soia", "frutta a guscio", "arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 366, "energy_kj": 1548,
+      "fat_g": 8.5, "saturated_fat_g": 1.8,
+      "carbs_g": 38.0, "sugars_g": 1.5,
+      "fiber_g": 10.0, "protein_g": 30.0, "salt_g": 0.3,
+      "omega3_ala_g": 1.8
+    },
+    "per_unit": {
+      "unit_label": "per porzione (40g)",
+      "energy_kcal": 146, "energy_kj": 619,
+      "fat_g": 3.4, "saturated_fat_g": 0.7,
+      "carbs_g": 15.2, "sugars_g": 0.6,
+      "fiber_g": 4.0, "protein_g": 12.0, "salt_g": 0.12,
+      "omega3_ala_g": 0.7
+    }
+  },
+
+  "serving_size_g": 40,
+  "serving_note": "circa 3 cucchiai colmi",
+
+  "comparison_vs_others": {
+    "multicereali_protein": 30,
+    "avena_dpg_protein": 28,
+    "farina_00_protein": 10,
+    "multicereali_fiber": 10,
+    "avena_dpg_fiber": 8,
+    "farina_00_fiber": 2.5,
+    "multicereali_omega3": 1.8,
+    "avena_dpg_omega3": 0,
+    "farina_00_omega3": 0
+  },
+
+  "usage_tips": [
+    "Pane proteico: sostituisci il 40-50% della farina di forza. Farro e segale danno struttura.",
+    "Muffin rustici: 60g farina + 1 uovo + 30ml latte + lievito + topping a piacere.",
+    "Porridge ricco: 40g in 180ml latte caldo. Il sapore è già ricco di per sé.",
+    "Coating per pollo/pesce: panatura proteica dal sapore rustico.",
+    "Per chi si allena ad alta intensità e ha bisogno di apporto calorico e proteico elevato."
+  ],
+
+  "storage": "Richiudere bene. Semi di lino sensibili all'ossidazione: conservare sotto i 20°C. Dopo apertura, consumare entro 2 mesi per freschezza omega-3.",
+  "shelf_life_months": 18,
+
+  "related_products": ["FLR-001", "SPR-002", "BAR-C-002"],
+  "related_recipes": ["pancake-proteico", "banana-bread"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

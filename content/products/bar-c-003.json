@@ -1,0 +1,61 @@
+{
+  "id": "BAR-C-003",
+  "ean": "8012345000103",
+  "name": "ProBar Classic Cocco & Mandorla",
+  "line": "ProBar Classic",
+  "category": "bars",
+  "type": "classic",
+  "flavor": "Cocco & Mandorla",
+  "weight_g": 60,
+  "price": 2.49,
+  "price_box_12": 24.99,
+  "status": "available",
+  "is_bestseller": false,
+
+  "description": {
+    "short": "Barretta proteica con cocco rapé, scaglie di mandorla e copertura al cioccolato bianco. 20g di proteine.",
+    "long": "Il gusto estivo della gamma Classic. Dolcezza naturale del cocco rapé con la croccantezza delle scaglie di mandorla, avvolto in copertura di cioccolato bianco sottile. La meno 'da palestra' delle Classic — il gusto è così piacevole che la mangi volentieri anche senza esserti allenato.",
+    "founder_note": "La Cocco & Mandorla è nata perché Sofia tornava dalle vacanze in Sardegna e diceva sempre che le mancava un gusto fresco nella gamma. Abbiamo fatto 14 prove prima di trovare il bilanciamento giusto. — Marco Delvecchio"
+  },
+
+  "ingredients": "Miscela proteica (proteine concentrate del siero del latte, caseinato di calcio), sciroppo di glucosio, farina di cocco 7%, copertura al cioccolato bianco (zucchero, burro di cacao, latte intero in polvere, emulsionante: lecitina di soia), scaglie di mandorle 4%, fiocchi d'avena, olio di girasole, cocco rapé, aromi naturali, sale.",
+
+  "allergens": {
+    "contains": ["latte", "soia", "glutine", "frutta a guscio (mandorle)"],
+    "may_contain": ["arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 372, "energy_kj": 1557,
+      "fat_g": 14.0, "saturated_fat_g": 7.5,
+      "carbs_g": 32.5, "sugars_g": 16.5,
+      "fiber_g": 5.0, "protein_g": 33.3, "salt_g": 0.5
+    },
+    "per_unit": {
+      "unit_label": "per barretta (60g)",
+      "energy_kcal": 223, "energy_kj": 934,
+      "fat_g": 8.4, "saturated_fat_g": 4.5,
+      "carbs_g": 19.5, "sugars_g": 9.9,
+      "fiber_g": 3.0, "protein_g": 20.0, "salt_g": 0.30
+    },
+    "amino_acids_per_unit": {
+      "leucine_g": 2.1, "isoleucine_g": 1.2, "valine_g": 1.1,
+      "bcaa_total_g": 4.4, "glutamine_g": 3.2
+    }
+  },
+
+  "usage_tips": [
+    "Snack pre-spiaggia/piscina: compatta e non si scioglie facilmente.",
+    "Colazione veloce: abbinata a un frutto e un caffè, è completa.",
+    "Merenda per escursionisti: alto contenuto calorico e proteico in formato compatto."
+  ],
+
+  "storage": "Conservare in luogo fresco e asciutto (15-25°C). La copertura al cioccolato bianco è più sensibile al calore — evitare esposizioni sopra i 28°C.",
+  "shelf_life_months": 12,
+
+  "related_products": ["BAR-V-001", "SPR-003", "FLR-002"],
+  "related_recipes": ["overnight-oats"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011", "Analisi laboratorio indipendente"]
+}

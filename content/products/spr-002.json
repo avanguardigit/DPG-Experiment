@@ -1,0 +1,60 @@
+{
+  "id": "SPR-002",
+  "ean": "8012345000402",
+  "name": "Crema di Arachidi Crunchy",
+  "category": "spreads",
+  "weight_g": 400,
+  "price": 6.99,
+  "status": "available",
+
+  "description": {
+    "short": "Arachidi tostate 99% con granella croccante + sale marino. 28g proteine/100g.",
+    "long": "Stessa base della Smooth — arachidi tostate 99% e sale marino — con pezzi di arachide grossolanamente tritati (15%). Base liscia con isole croccanti distribuite uniformemente. Non è granulosa, è cremosa CON pezzi. Nata perché metà del team DPG preferiva la smooth e l'altra metà la crunchy.",
+    "founder_note": null
+  },
+
+  "ingredients": "Arachidi tostate 99% (di cui granella di arachidi 15%), sale marino.",
+
+  "allergens": {
+    "contains": ["arachidi"],
+    "may_contain": ["frutta a guscio", "sesamo"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 614, "energy_kj": 2528,
+      "fat_g": 50.0, "saturated_fat_g": 8.0,
+      "carbs_g": 8.0, "sugars_g": 4.0,
+      "fiber_g": 8.5, "protein_g": 28.0, "salt_g": 0.8
+    },
+    "per_unit": {
+      "unit_label": "per porzione (20g)",
+      "energy_kcal": 123, "energy_kj": 506,
+      "fat_g": 10.0, "saturated_fat_g": 1.6,
+      "carbs_g": 1.6, "sugars_g": 0.8,
+      "fiber_g": 1.7, "protein_g": 5.6, "salt_g": 0.16
+    }
+  },
+
+  "nutrition_note": "Valori identici alla Smooth — la granella è la stessa arachide in forma diversa.",
+
+  "serving_size_g": 20,
+  "serving_note": "1 cucchiaio colmo — circa 20 porzioni per vasetto",
+
+  "usage_tips": [
+    "Topping per porridge e yogurt: la croccantezza aggiunge texture fantastica.",
+    "Su toast con banana: il classico, ma la croccantezza lo eleva.",
+    "Snack diretto: un cucchiaio dalla confezione.",
+    "Topping per gelato o nice cream alla banana.",
+    "In ricette al forno: aggiunge texture a muffin e biscotti proteici.",
+    "Scegli CRUNCHY per: texture, topping, cucchiaio. Scegli SMOOTH per: liquidi, salse, spalmare sottile."
+  ],
+
+  "storage": "Temperatura ambiente, non refrigerare. La granella può depositarsi sul fondo — mescolare prima dell'uso.",
+  "shelf_life_months": 12,
+
+  "related_products": ["SPR-001", "SPR-003", "BAR-C-002", "FLR-003"],
+  "related_recipes": ["energy-balls", "overnight-oats"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

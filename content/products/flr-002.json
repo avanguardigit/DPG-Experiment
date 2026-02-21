@@ -1,0 +1,58 @@
+{
+  "id": "FLR-002",
+  "ean": "8012345000302",
+  "name": "Farina di Riso Integrale",
+  "category": "flours",
+  "weight_g": 1000,
+  "price": 7.99,
+  "status": "available",
+  "special_note": "Naturalmente senza glutine",
+
+  "description": {
+    "short": "Farina di riso integrale + proteina di pisello. Senza glutine, senza latticini, senza soia. 24g proteine/100g.",
+    "long": "L'opzione per chi segue una dieta senza glutine senza rinunciare a ricette proteiche. Fonte proteica vegetale (pisello), adatta anche a chi evita i latticini. Sapore neutro e leggermente dolce, estremamente versatile. Macinatura fine, quasi impalpabile, perfetta per crêpe, pastelle e impasti morbidi. Il prodotto più trasversale del catalogo farine.",
+    "founder_note": null
+  },
+
+  "ingredients": "Farina di riso integrale 78%, proteina isolata di pisello 22%.",
+
+  "allergens": {
+    "contains": [],
+    "may_contain": ["glutine", "latte", "soia", "frutta a guscio", "arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 360, "energy_kj": 1527,
+      "fat_g": 3.0, "saturated_fat_g": 0.8,
+      "carbs_g": 55.0, "sugars_g": 0.8,
+      "fiber_g": 4.0, "protein_g": 24.0, "salt_g": 0.03
+    },
+    "per_unit": {
+      "unit_label": "per porzione (40g)",
+      "energy_kcal": 144, "energy_kj": 611,
+      "fat_g": 1.2, "saturated_fat_g": 0.3,
+      "carbs_g": 22.0, "sugars_g": 0.3,
+      "fiber_g": 1.6, "protein_g": 9.6, "salt_g": 0.01
+    }
+  },
+
+  "serving_size_g": 40,
+  "serving_note": "circa 3 cucchiai colmi",
+
+  "usage_tips": [
+    "Crêpe senza glutine: 40g farina + 1 uovo + 80ml bevanda vegetale + sale.",
+    "Sostituzione 1:1 della farina di riso normale, con più del doppio delle proteine.",
+    "Base per pizza senza glutine: 150g farina + 100ml acqua + 5g olio + lievito.",
+    "Addensante per zuppe e salse: 1-2 cucchiai senza glutine.",
+    "Pastella per frutta: 30g farina + acqua frizzante fredda."
+  ],
+
+  "storage": "Richiudere bene. Luogo fresco e asciutto, lontano da fonti di umidità (il riso assorbe facilmente).",
+  "shelf_life_months": 18,
+
+  "related_products": ["FLR-001", "FLR-003", "BAR-V-001", "SPR-003"],
+  "related_recipes": ["energy-balls", "banana-bread"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011"]
+}

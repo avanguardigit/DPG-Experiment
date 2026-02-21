@@ -1,0 +1,61 @@
+{
+  "id": "BAR-C-002",
+  "ean": "8012345000102",
+  "name": "ProBar Classic Nocciola Crunch",
+  "line": "ProBar Classic",
+  "category": "bars",
+  "type": "classic",
+  "flavor": "Nocciola Crunch",
+  "weight_g": 60,
+  "price": 2.49,
+  "price_box_12": 24.99,
+  "status": "available",
+  "is_bestseller": false,
+
+  "description": {
+    "short": "Barretta proteica croccante con granella di nocciole italiane e copertura al cioccolato al latte. 20g di proteine.",
+    "long": "Granella di nocciole italiane distribuita in tutto il cuore della barretta, con pasta di nocciole che lega il tutto e copertura al cioccolato al latte. Il 'crunch' è reale: ad ogni morso senti la granella scrocchiare. Diventata rapidamente la preferita di chi ama il gianduia ma vuole più carattere.",
+    "founder_note": null
+  },
+
+  "ingredients": "Miscela proteica (proteine concentrate del siero del latte, caseinato di calcio), sciroppo di glucosio, granella di nocciole 8%, copertura al latte (zucchero, burro di cacao, latte intero in polvere, emulsionante: lecitina di soia), fiocchi d'avena, pasta di nocciole 3%, olio di girasole, aromi naturali, sale.",
+
+  "allergens": {
+    "contains": ["latte", "soia", "glutine", "frutta a guscio (nocciole)"],
+    "may_contain": ["arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 378, "energy_kj": 1582,
+      "fat_g": 14.5, "saturated_fat_g": 5.0,
+      "carbs_g": 33.0, "sugars_g": 17.0,
+      "fiber_g": 4.0, "protein_g": 33.3, "salt_g": 0.55
+    },
+    "per_unit": {
+      "unit_label": "per barretta (60g)",
+      "energy_kcal": 227, "energy_kj": 949,
+      "fat_g": 8.7, "saturated_fat_g": 3.0,
+      "carbs_g": 19.8, "sugars_g": 10.2,
+      "fiber_g": 2.4, "protein_g": 20.0, "salt_g": 0.33
+    },
+    "amino_acids_per_unit": {
+      "leucine_g": 2.1, "isoleucine_g": 1.2, "valine_g": 1.1,
+      "bcaa_total_g": 4.4, "glutamine_g": 3.2
+    }
+  },
+
+  "usage_tips": [
+    "Dopo l'allenamento in pausa pranzo: recovery snack veloce prima di tornare in ufficio.",
+    "Snack pomeridiano goloso: soddisfa la voglia di dolce con 20g di proteine.",
+    "Sbriciolata su yogurt greco: spezzala in pezzi per un dessert proteico improvvisato."
+  ],
+
+  "storage": "Conservare in luogo fresco e asciutto (15-25°C). In estate, evitare temperature superiori ai 30°C per preservare la croccantezza della granella.",
+  "shelf_life_months": 12,
+
+  "related_products": ["BAR-C-001", "SPR-001", "FLR-001"],
+  "related_recipes": ["pancake-proteico"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011", "Analisi laboratorio indipendente"]
+}

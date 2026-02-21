@@ -1,0 +1,63 @@
+{
+  "id": "BAR-C-001",
+  "ean": "8012345000101",
+  "name": "ProBar Classic Cioccolato Fondente",
+  "line": "ProBar Classic",
+  "category": "bars",
+  "type": "classic",
+  "flavor": "Cioccolato Fondente",
+  "weight_g": 60,
+  "price": 2.49,
+  "price_box_12": 24.99,
+  "status": "available",
+  "is_bestseller": true,
+  "bestseller_note": "Il prodotto più venduto di DPG Nutrition",
+
+  "description": {
+    "short": "Barretta proteica con copertura di vero cioccolato fondente e cuore morbido. 20g di proteine.",
+    "long": "La ProBar Classic Cioccolato Fondente è dove tutto è iniziato. Il primo prodotto mai creato da DPG, ancora oggi il più venduto. Il fondente bilancia la dolcezza del cuore proteico con una nota finale leggermente amara, appagante senza essere eccessiva. È la barretta che consigliamo a chi prova DPG per la prima volta.",
+    "founder_note": null
+  },
+
+  "ingredients": "Miscela proteica (proteine concentrate del siero del latte, caseinato di calcio), sciroppo di glucosio, copertura di cioccolato fondente 12% (pasta di cacao, burro di cacao, emulsionante: lecitina di soia), fiocchi d'avena, olio di girasole, cacao in polvere, aromi naturali, sale.",
+
+  "allergens": {
+    "contains": ["latte", "soia", "glutine"],
+    "may_contain": ["frutta a guscio", "arachidi"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 365, "energy_kj": 1527,
+      "fat_g": 12.0, "saturated_fat_g": 5.5,
+      "carbs_g": 35.0, "sugars_g": 18.0,
+      "fiber_g": 4.5, "protein_g": 33.3, "salt_g": 0.6
+    },
+    "per_unit": {
+      "unit_label": "per barretta (60g)",
+      "energy_kcal": 219, "energy_kj": 916,
+      "fat_g": 7.2, "saturated_fat_g": 3.3,
+      "carbs_g": 21.0, "sugars_g": 10.8,
+      "fiber_g": 2.7, "protein_g": 20.0, "salt_g": 0.36
+    },
+    "amino_acids_per_unit": {
+      "leucine_g": 2.1, "isoleucine_g": 1.2, "valine_g": 1.1,
+      "bcaa_total_g": 4.4, "glutamine_g": 3.2
+    }
+  },
+
+  "usage_tips": [
+    "Post-workout (entro 30 min): il whey fornisce aminoacidi rapidi per il recupero. Abbinare con acqua.",
+    "Spuntino mattutino (10:00-10:30): ideale per chi fa colazione presto e pranza tardi.",
+    "Spuntino pomeridiano (16:00-17:00): tiene a bada la fame fino a cena.",
+    "Pre-workout: almeno 45-60 minuti prima per permettere la digestione."
+  ],
+
+  "storage": "Conservare in luogo fresco e asciutto (15-25°C). Non esporre a fonti di calore diretto. Dopo l'apertura, consumare subito.",
+  "shelf_life_months": 12,
+
+  "related_products": ["BAR-C-002", "SPR-001", "FLR-001"],
+  "related_recipes": ["pancake-proteico", "energy-balls"],
+
+  "certifications": ["ISO 22000", "Reg. UE 1169/2011", "Analisi laboratorio indipendente"]
+}

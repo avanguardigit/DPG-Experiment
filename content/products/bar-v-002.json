@@ -1,0 +1,62 @@
+{
+  "id": "BAR-V-002",
+  "ean": "8012345000202",
+  "name": "ProBar Plant Pistacchio & Limone",
+  "line": "ProBar Plant",
+  "category": "bars",
+  "type": "vegan",
+  "flavor": "Pistacchio & Limone",
+  "weight_g": 55,
+  "price": 2.99,
+  "price_box_12": 29.99,
+  "status": "available",
+  "is_bestseller": false,
+  "certifications_product": ["V-Label (vegano)", "senza lattosio"],
+
+  "description": {
+    "short": "Barretta vegana gourmet con pasta di pistacchio e scorza di limone. 16g di proteine.",
+    "long": "Il gusto più originale della gamma DPG. Nata come edizione limitata estate 2023, diventata permanente per il successo. Pasta di pistacchio (8%) e granella danno corpo burroso, la scorza di limone disidratata taglia la dolcezza con nota agrumata. La curcuma come colorante naturale dona il caratteristico colore verde-dorato. Il prezzo più alto (€2,99) riflette il costo del pistacchio di qualità.",
+    "founder_note": "Stavamo testando gusti per l'estate e Sofia ha portato dei biscotti al pistacchio e limone fatti in casa. Ci sono voluti 6 mesi per azzeccare il bilanciamento — il pistacchio tende a coprire tutto. — Marco Delvecchio"
+  },
+
+  "ingredients": "Miscela proteica vegetale (proteina isolata di pisello, proteina di riso integrale), sciroppo di riso, pasta di pistacchio 8%, olio di cocco, scorza di limone disidratata 2%, fibre di acacia, granella di pistacchio 2%, zucchero di cocco, aromi naturali, curcuma (colorante), sale.",
+
+  "allergens": {
+    "contains": ["frutta a guscio (pistacchi)"],
+    "may_contain": ["arachidi", "soia", "latte"]
+  },
+
+  "nutrition": {
+    "per_100g": {
+      "energy_kcal": 361, "energy_kj": 1510,
+      "fat_g": 13.0, "saturated_fat_g": 4.5,
+      "carbs_g": 32.0, "sugars_g": 15.0,
+      "fiber_g": 6.5, "protein_g": 29.1, "salt_g": 0.45
+    },
+    "per_unit": {
+      "unit_label": "per barretta (55g)",
+      "energy_kcal": 199, "energy_kj": 831,
+      "fat_g": 7.2, "saturated_fat_g": 2.5,
+      "carbs_g": 17.6, "sugars_g": 8.3,
+      "fiber_g": 3.6, "protein_g": 16.0, "salt_g": 0.25
+    },
+    "amino_acids_per_unit": {
+      "leucine_g": 1.3, "isoleucine_g": 0.7, "valine_g": 0.8,
+      "bcaa_total_g": 2.8, "arginine_g": 1.4
+    }
+  },
+
+  "usage_tips": [
+    "Snack elegante: perfetta da offrire, non sembra il tipico cibo da palestra.",
+    "Dopo pranzo: la nota di limone pulisce il palato.",
+    "Pre-workout estivo: gusto rinfrescante che non appesantisce."
+  ],
+
+  "storage": "Conservare in luogo fresco e asciutto (15-25°C). Il colore verde-dorato è naturale (curcuma) e può variare da lotto a lotto.",
+  "shelf_life_months": 12,
+
+  "related_products": ["BAR-V-001", "SPR-003", "FLR-002"],
+  "related_recipes": [],
+
+  "certifications": ["ISO 22000", "V-Label", "Reg. UE 1169/2011", "Analisi laboratorio indipendente"]
+}
