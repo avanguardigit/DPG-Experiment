@@ -507,9 +507,7 @@ app.post('/api/generate', async (req, res) => {
 
     const userProfile = buildUserProfile(journey);
     if (userProfile) {
-      log(`[${requestId}] Profilo: ${userProfile.total} pagine`);
-      log(`[${requestId}] Journey completa: [${userProfile.intents.join(' → ')}]`);
-      log(`[${requestId}] Contesto profilo per LLM:\n${profileToPromptContext(userProfile)}`);
+      log(`[${requestId}] Profilo: ${userProfile.total} pagine — [${userProfile.intents.join(' → ')}]`);
     } else {
       log(`[${requestId}] Nessun profilo (prima visita)`);
     }
