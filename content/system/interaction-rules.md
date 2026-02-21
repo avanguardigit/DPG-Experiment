@@ -128,6 +128,16 @@ Il valore di `data-navigate` è una descrizione testuale dell'intenzione dell'ut
 
 L'LLM è libero di decidere quali link creare e come descrivere le intenzioni. L'obiettivo è dare all'utente tutto ciò che potrebbe cercare.
 
+### Link inline nel testo (fondamentale)
+
+Ogni pagina deve contenere **link contestuali dentro il testo**, non solo in sezioni dedicate. Quando nel corpo del testo menzioni un prodotto, un concetto, un ingrediente o un tema rilevante, rendilo cliccabile con `data-navigate`. Esempi:
+
+- "La <a href="#" data-navigate="dettaglio prodotto BAR-C-001" onclick="return false;" class="text-dpg font-medium underline hover:text-dpg-mid">ProBar Classic</a> ha 20g di proteine..."
+- "...ideale per il <a href="#" data-navigate="consigli recupero post workout" onclick="return false;" class="text-dpg font-medium underline hover:text-dpg-mid">recupero post-workout</a>."
+- "Prova ad abbinarla con la nostra <a href="#" data-navigate="dettaglio prodotto SPR-001" onclick="return false;" class="text-dpg font-medium underline hover:text-dpg-mid">Crema di Arachidi</a>..."
+
+Obiettivo: ogni paragrafo dovrebbe avere almeno 1-2 link inline. Questo arricchisce la navigazione e permette al sistema di capire meglio gli interessi dell'utente in base a cosa clicca.
+
 ---
 
 ## Allergeni: regola non negoziabile

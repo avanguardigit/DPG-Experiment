@@ -101,8 +101,14 @@ function buildSystemPrompt() {
   ].join('');
 }
 
-const systemPrompt = buildSystemPrompt();
-log(`System prompt: ${systemPrompt.length} caratteri`);
+const systemPromptText = buildSystemPrompt();
+const approxTokens = Math.ceil(systemPromptText.length / 3.5);
+log(`System prompt: ${systemPromptText.length} char (~${approxTokens} token)`);
+log(`Prompt caching attivo: prima chiamata ~${approxTokens} token, successive ~${Math.ceil(approxTokens * 0.1)} token`);
+
+const systemPromptCached = [
+  { type: 'text', text: systemPromptText, cache_control: { type: 'ephemeral' } },
+];
 
 // ---------------------------------------------------------------------------
 // 3. Utilità
@@ -139,10 +145,13 @@ function esc(str) {
 // ---------------------------------------------------------------------------
 
 async function callClaude(messages, requestId, opts = {}) {
-  const sys = opts.system || systemPrompt;
   const maxTokens = opts.max_tokens || 12000;
+  const useCache = opts.system ? false : true;
+  const sys = opts.system
+    ? [{ type: 'text', text: opts.system }]
+    : systemPromptCached;
 
-  log(`[${requestId}] Chiamata API (${MODEL}, max_tokens=${maxTokens})...`);
+  log(`[${requestId}] Chiamata API (${MODEL}, max_tokens=${maxTokens}, cache=${useCache})...`);
   const start = Date.now();
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -165,7 +174,12 @@ async function callClaude(messages, requestId, opts = {}) {
   const data = await res.json();
   const text = data.content?.[0]?.text ?? '';
   const usage = data.usage || {};
-  log(`[${requestId}] API OK (${elapsed}ms) — input: ${usage.input_tokens}, output: ${usage.output_tokens}`);
+  const cacheInfo = usage.cache_read_input_tokens
+    ? `CACHE HIT ${usage.cache_read_input_tokens} token risparmiati`
+    : usage.cache_creation_input_tokens
+      ? `CACHE WRITE ${usage.cache_creation_input_tokens} token cachati`
+      : 'no cache';
+  log(`[${requestId}] API OK (${elapsed}ms) — input: ${usage.input_tokens}, output: ${usage.output_tokens} [${cacheInfo}]`);
   return text;
 }
 
@@ -540,7 +554,18 @@ app.post('/api/generate', async (req, res) => {
       }
 
       if (cycle >= MAX_CFD_CYCLES) {
-        return res.status(500).json({ error: 'Troppi cicli CFD — generazione interrotta' });
+        log(`[${requestId}] Max CFD raggiunto — forzo generazione con contesto disponibile`);
+        messages.push({ role: 'assistant', content: reply });
+        messages.push({
+          role: 'user',
+          content: 'Non puoi richiedere altri file. Genera la pagina HTML con il contesto che hai già a disposizione.',
+        });
+        const forced = await callClaude(messages, requestId);
+        const html = stripCodeFence(forced);
+        const totalMs = Date.now() - requestStart;
+        log(`[${requestId}] HTML forzato (${html.length} char)`);
+        log(`[${requestId}] COMPLETATA in ${totalMs}ms (${cycle + 2} chiamate API, forzata)`);
+        return res.json({ html });
       }
 
       log(`[${requestId}] CFD: [${requestedFiles.join(', ')}]`);
