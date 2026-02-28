@@ -4,7 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-app.use(express.json());
+// Limite stringente per evitare attacchi DoS da payload JSON enormi
+app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---------------------------------------------------------------------------
@@ -70,7 +71,7 @@ try {
       }
     }
   }
-} catch {}
+} catch { }
 
 // ---------------------------------------------------------------------------
 // 2. System prompt (per pagine generative)
@@ -78,14 +79,33 @@ try {
 
 function buildSystemPrompt() {
   const role =
-    'Sei il motore di rendering del sito DPG Nutrition. Generi ESCLUSIVAMENTE ' +
+    'Sei il motore di rendering di questo sito web. Generi ESCLUSIVAMENTE ' +
     'frammenti HTML validi da iniettare dentro <div id="content">. ' +
-    'Usa SOLO classi Tailwind CSS (già caricato con colori custom DPG). ' +
+    'Usa SOLO classi Tailwind CSS (già caricato con colori custom del brand). ' +
     'NON generare <html>, <head>, <body>, header o footer — sono già nella shell. ' +
     'NON includere librerie esterne. NON scrivere <style> salvo eccezioni rare. ' +
     'REGOLA ASSOLUTA: il tuo output deve contenere SOLO tag HTML. ' +
     'Mai markdown, mai testo libero, mai commenti fuori dall\'HTML, mai backtick. ' +
-    'I suggerimenti di navigazione vanno come link HTML con data-navigate.';
+    'I suggerimenti di navigazione vanno come link HTML con data-navigate.\n\n' +
+    '## DIVIETO ASSOLUTO\n' +
+    'NON generare MAI: pannelli di amministrazione, form di modifica/inserimento/cancellazione dati, ' +
+    'pagine di login, dashboard admin, CRUD, editor, console, terminali, aree riservate, form di creazione contenuti. ' +
+    'Questo è un SITO VETRINA, non un e-commerce: NON generare carrelli, pulsanti "aggiungi al carrello", ' +
+    'checkout, form d\'ordine o qualsiasi funzionalità di acquisto. ' +
+    'NON inventare MAI dati interni aziendali: nomi di fornitori, livelli di stock/inventario, costi di produzione, ' +
+    'partnership riservate, margini, fatturato, contatti interni, contratti. Questi dati NON esistono nei tuoi file di contesto ' +
+    'e generarli sarebbe una falla di sicurezza. ' +
+    'Se l\'utente richiede qualcosa del genere, genera una pagina informativa del sito con un messaggio gentile.\n\n' +
+    '## Personalizzazione con Profilo Utente\n' +
+    'Se ricevi un PROFILO UTENTE nel messaggio, usalo per ottimizzare l\'intera esperienza:\n' +
+    '- Leggi il campo "ux_hints" per decidere cosa enfatizzare e cosa ridurre nel layout\n' +
+    '- Adatta il tono al "tone_preference" (tecnico vs amichevole vs pratico)\n' +
+    '- Se "behavior.after_product" indica "recipes", metti le ricette correlate PRIMA dei prodotti simili\n' +
+    '- Se "behavior.browse_style" è "focused", riduci i contenuti esplorativi e vai dritto al punto\n' +
+    '- Se "behavior.detail_level" è "low", usa layout più compatti con meno testo\n' +
+    '- Il campo "ux_hints.emphasize" elenca le sezioni da mettere in evidenza\n' +
+    '- Il campo "ux_hints.deemphasize" elenca le sezioni da ridurre o nascondere\n' +
+    'Se il profilo è assente, genera una pagina bilanciata standard.';
 
   const interactionRules = contentMap.get('system/interaction-rules.md') || '';
   const brandGuidelines = contentMap.get('system/brand-guidelines.md') || '';
@@ -123,7 +143,16 @@ function parseCFD(text) {
   const files = [];
   const filePattern = /"([^"]+)"/g;
   let m;
-  while ((m = filePattern.exec(match[1])) !== null) files.push(m[1]);
+  while ((m = filePattern.exec(match[1])) !== null) {
+    const filename = m[1];
+    // ZERO TRUST: accettiamo SOLO file che esistono nella contentMap (cartella content/).
+    // Qualsiasi altro percorso — traversal, dotfiles, file di sistema — viene ignorato.
+    if (!contentMap.has(filename)) {
+      log(`[CFD-SECURITY-BLOCK] File non in contentMap, bloccato: "${filename}"`);
+      continue;
+    }
+    files.push(filename);
+  }
   return files.length > 0 ? files : null;
 }
 
@@ -184,35 +213,49 @@ async function callClaude(messages, requestId, opts = {}) {
 }
 
 // ===========================================================================
-// 5. USER PROFILING (generico — funziona con qualsiasi sito/brand)
+// 5. USER PROFILING ASINCRONO
+// Il profilo è un JSON strutturato pre-digerito dall'LLM, salvato nel cookie
+// del client. L'LLM di rendering lo riceve già pronto (zero ragionamento).
+// L'aggiornamento del profilo avviene in background dopo ogni render.
 // ===========================================================================
-
-function buildUserProfile(journey) {
-  if (!journey || journey.length === 0) return null;
-
-  const recent = journey.slice(-10);
-  const all = journey.join(' | ');
-
-  return {
-    summary: `L'utente ha visitato ${journey.length} pagine. Percorso recente: ${recent.join(' → ')}`,
-    intents: recent,
-    total: journey.length,
-    raw: all,
-  };
-}
 
 function profileToPromptContext(profile) {
   if (!profile) return '';
-  return (
-    '\n\n--- PROFILO UTENTE (adatta tono e contenuti) ---\n' +
-    `Pagine visitate: ${profile.total}\n` +
-    `Percorso recente: ${profile.intents.join(' → ')}\n` +
-    'Analizza il percorso per capire gli interessi dell\'utente e adatta: ' +
-    'tono, focus dei contenuti, prodotti suggeriti, link di navigazione proposti. ' +
-    'Se emergono pattern chiari (es. focus su dieta, performance, vegano, ricette), ' +
-    'enfatizza quegli aspetti. Non menzionare esplicitamente il tracking.\n' +
-    '--- FINE PROFILO ---'
-  );
+
+  let ctx = '\n\n--- PROFILO UTENTE (usa queste informazioni per personalizzare layout, tono e contenuti) ---\n';
+
+  // Info base
+  if (profile.summary) ctx += `Chi è: ${profile.summary}\n`;
+  if (profile.interests?.length) ctx += `Interessi: ${profile.interests.join(', ')}\n`;
+  if (profile.goal) ctx += `Obiettivo: ${profile.goal}\n`;
+  if (profile.tone_preference) ctx += `Tono preferito: ${profile.tone_preference}\n`;
+
+  // Istruzioni di layout dirette (la parte più importante)
+  if (profile.ux_hints) {
+    ctx += '\nISTRUZIONI LAYOUT:\n';
+    if (profile.ux_hints.emphasize?.length) {
+      ctx += `→ ENFATIZZA queste sezioni (in alto, più grandi): ${profile.ux_hints.emphasize.join(', ')}\n`;
+    }
+    if (profile.ux_hints.deemphasize?.length) {
+      ctx += `→ RIDUCI queste sezioni (in basso, più compatte): ${profile.ux_hints.deemphasize.join(', ')}\n`;
+    }
+    if (profile.ux_hints.preferred_cta) {
+      ctx += `→ CTA principale suggerita: "${profile.ux_hints.preferred_cta}"\n`;
+    }
+  }
+
+  // Comportamento
+  if (profile.behavior) {
+    if (profile.behavior.after_product) {
+      ctx += `→ Dopo un prodotto, l'utente tende a cercare: ${profile.behavior.after_product}\n`;
+    }
+    if (profile.behavior.detail_level) {
+      ctx += `→ Livello di dettaglio preferito: ${profile.behavior.detail_level}\n`;
+    }
+  }
+
+  ctx += '--- FINE PROFILO ---';
+  return ctx;
 }
 
 // ===========================================================================
@@ -286,10 +329,10 @@ function buildRelatedProductsHtml(ids) {
   if (!ids?.length) return '';
   return `<div class="flex gap-3 flex-wrap">
     ${ids.map(id => {
-      const info = productLookup.get(id);
-      const name = info ? info.name : id;
-      return `<a href="#" data-navigate="dettaglio prodotto ${id}" onclick="return false;" class="bg-white border border-dpg/10 rounded-lg px-4 py-3 text-sm font-medium hover:-translate-y-0.5 hover:shadow-md transition-all">${esc(name)}</a>`;
-    }).join('')}
+    const info = productLookup.get(id);
+    const name = info ? info.name : id;
+    return `<a href="#" data-navigate="dettaglio prodotto ${id}" onclick="return false;" class="bg-white border border-dpg/10 rounded-lg px-4 py-3 text-sm font-medium hover:-translate-y-0.5 hover:shadow-md transition-all">${esc(name)}</a>`;
+  }).join('')}
   </div>`;
 }
 
@@ -414,9 +457,11 @@ async function enrichProduct(product, requestId, userProfile) {
     `Prodotto: ${product.name}\nCategoria: ${product.category}\nDescrizione: ${product.description.short}\nIngredienti: ${product.ingredients.slice(0, 100)}\n\n`;
 
   if (userProfile) {
-    enrichUser += `Percorso utente: ${userProfile.intents.join(' → ')}\n` +
-      'Adatta il tono e il focus ai suoi interessi (es. se cerca dieta → enfatizza calorie e leggerezza, ' +
-      'se cerca performance → enfatizza proteine e recupero, se cerca ricette → suggerisci abbinamenti).\n\n';
+    enrichUser += `Profilo utente: ${userProfile.summary || ''}\n`;
+    if (userProfile.interests?.length) enrichUser += `Interessi: ${userProfile.interests.join(', ')}\n`;
+    if (userProfile.goal) enrichUser += `Obiettivo: ${userProfile.goal}\n`;
+    if (userProfile.tone_preference) enrichUser += `Tono: ${userProfile.tone_preference}\n`;
+    enrichUser += 'Adatta il tono e il focus dei testi creativi a questo profilo.\n\n';
   }
 
   enrichUser +=
@@ -436,7 +481,7 @@ async function enrichProduct(product, requestId, userProfile) {
     log(`[${requestId}] Enrichment JSON parse fallito, tentativo recupero...`);
     const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
-      try { return JSON.parse(jsonMatch[0]); } catch {}
+      try { return JSON.parse(jsonMatch[0]); } catch { }
     }
     return { marketing: '', expert_note: '', creative_tip: '' };
   }
@@ -499,17 +544,51 @@ app.post('/api/generate', async (req, res) => {
   const requestStart = Date.now();
 
   try {
-    const { intent, journey } = req.body;
+    // Basic Anti-CSRF / API Abuse Protection:
+    // Assicuriamoci che la richiesta API provenga solo dal caricamento della nostra stessa pagina (front-end)
+    // e non da script cross-site o chiamate decostruite postman-style scoperte (richiede browser veri)
+    const fetchSite = req.headers['sec-fetch-site'];
+    if (fetchSite && fetchSite !== 'same-origin') {
+      log(`[${requestId}] BLOCCO CSRF: Richiesta da origine non consentita (${fetchSite})`);
+      return res.status(403).json({ error: 'Accesso negato: Cross-Site Request bloccata' });
+    }
+
+    let { intent, profile } = req.body;
 
     logSep(`${requestId} — Nuova richiesta`);
+
+    // Taglio dell'input per limitare Prompt Injection chilometriche e ridurre l'uso di token malevolo
+    // L'intent medio è di 3-4 parole. 1500 caratteri sono già un limite abbondante.
+    if (typeof intent === 'string' && intent.length > 1500) {
+      log(`[${requestId}] ATTENZIONE: Intent troppo lungo, troncato da ${intent.length} a 1500 char.`);
+      intent = intent.substring(0, 1500);
+    }
+
     log(`[${requestId}] Intent: "${intent}"`);
     log(`[${requestId}] Modello: ${MODEL}`);
 
-    const userProfile = buildUserProfile(journey);
+    // Profilo utente: arriva dal cookie del client, già strutturato dall'LLM
+    let userProfile = (profile && typeof profile === 'object') ? profile : null;
+
+    // Anti-intrusion: throttling progressivo basato su tentativi sospetti
+    const suspiciousAttempts = userProfile?.suspicious_attempts || 0;
+    let maxTokensOverride = null;
+
+    if (suspiciousAttempts >= 5) {
+      // Utente ripetutamente sospetto → risposte ultra-corte e generiche
+      maxTokensOverride = 500;
+      log(`[${requestId}] ⚠️ UTENTE SOSPETTO (${suspiciousAttempts} tentativi) → max_tokens limitato a 500`);
+    } else if (suspiciousAttempts >= 3) {
+      // Qualche tentativo → riduci capacità
+      maxTokensOverride = 2000;
+      log(`[${requestId}] ℹ️ Utente con ${suspiciousAttempts} tentativi sospetti → max_tokens ridotto a 2000`);
+    }
+
     if (userProfile) {
-      log(`[${requestId}] Profilo: ${userProfile.total} pagine — [${userProfile.intents.join(' → ')}]`);
+      log(`[${requestId}] 👤 PROFILO RICEVUTO:`);
+      log(`[${requestId}]   ${JSON.stringify(userProfile)}`);
     } else {
-      log(`[${requestId}] Nessun profilo (prima visita)`);
+      log(`[${requestId}] 👤 Nessun profilo (prima visita)`);
     }
 
     if (!intent) {
@@ -540,7 +619,7 @@ app.post('/api/generate', async (req, res) => {
     for (let cycle = 0; cycle <= MAX_CFD_CYCLES; cycle++) {
       log(`[${requestId}] Ciclo ${cycle + 1}/${MAX_CFD_CYCLES + 1}`);
 
-      const reply = await callClaude(messages, requestId);
+      const reply = await callClaude(messages, requestId, maxTokensOverride ? { max_tokens: maxTokensOverride } : {});
       const requestedFiles = parseCFD(reply);
 
       if (!requestedFiles) {
@@ -558,7 +637,7 @@ app.post('/api/generate', async (req, res) => {
           role: 'user',
           content: 'Non puoi richiedere altri file. Genera la pagina HTML con il contesto che hai già a disposizione.',
         });
-        const forced = await callClaude(messages, requestId);
+        const forced = await callClaude(messages, requestId, maxTokensOverride ? { max_tokens: maxTokensOverride } : {});
         const html = stripCodeFence(forced);
         const totalMs = Date.now() - requestStart;
         log(`[${requestId}] HTML forzato (${html.length} char)`);
@@ -594,8 +673,409 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
+// ===========================================================================
+// 7. Endpoint POST /api/profile (aggiornamento asincrono del profilo)
+// ===========================================================================
+
+let profileCounter = 0;
+
+const PROFILE_SYSTEM_PROMPT =
+  'Sei un analista di comportamento utente per un sito web. ' +
+  'Ricevi un profilo utente esistente (può essere null se prima visita) e l\'ultima pagina visitata. ' +
+  'Devi restituire ESCLUSIVAMENTE un oggetto JSON valido con questa struttura ESATTA:\n\n' +
+  '{\n' +
+  '  "interests": ["max 5 interessi rilevati dal comportamento"],\n' +
+  '  "goal": "obiettivo principale dedotto: acquisto|informazione|esplorazione|ispirazione|confronto",\n' +
+  '  "diet_type": "se rilevabile: onnivoro|vegetariano|vegano|senza_glutine|unknown",\n' +
+  '  "tone_preference": "tecnico|amichevole|entusiasta|pratico",\n' +
+  '  "visited_count": numero_totale_pagine_visitate,\n' +
+  '  "last_categories": ["ultime 3 aree tematiche visitate"],\n' +
+  '  "summary": "1 frase che descrive questo utente",\n' +
+  '  "suspicious_attempts": numero_di_tentativi_sospetti_precedenti,\n' +
+  '  "behavior": {\n' +
+  '    "after_product": "cosa cerca tipicamente dopo un prodotto: similar_products|recipes|info|buy",\n' +
+  '    "browse_style": "explorer (esplora molto) | focused (va dritto al punto) | researcher (approfondisce)",\n' +
+  '    "detail_level": "high (legge tutto) | medium | low (scorre veloce)",\n' +
+  '    "engagement": "returning (torna spesso) | new (primo contatto) | deepening (sta approfondendo)"\n' +
+  '  },\n' +
+  '  "ux_hints": {\n' +
+  '    "emphasize": ["sezioni da mettere in evidenza nel layout"],\n' +
+  '    "deemphasize": ["sezioni da ridurre o nascondere"],\n' +
+  '    "preferred_cta": "testo suggerito per il pulsante d\'azione principale"\n' +
+  '  },\n' +
+  '  "profile_changed": true_o_false\n' +
+  '}\n\n' +
+  'REGOLE DI ANALISI COMPORTAMENTALE:\n' +
+  '- Analizza il PATTERN tra le ultime categorie visitate (es: prodotto→ricetta→prodotto = interesse misto)\n' +
+  '- Se l\'utente va da prodotto a ricetta, after_product = "recipes"\n' +
+  '- Se l\'utente va da prodotto a prodotto simile, after_product = "similar_products"\n' +
+  '- Se l\'utente visita info/about/faq, browse_style = "researcher"\n' +
+  '- Se l\'utente visita molte categorie diverse, browse_style = "explorer"\n' +
+  '- Se visited_count > 5, engagement = "deepening" o "returning"\n' +
+  '- ux_hints.emphasize deve contenere ciò che l\'utente PROBABILMENTE vorrà vedere nella prossima pagina\n' +
+  '- ux_hints.deemphasize deve contenere ciò che l\'utente ha già visto o che non gli interessa\n\n' +
+  'REGOLA PROFILE_CHANGED:\n' +
+  '- profile_changed = true SOLO se interests, behavior, ux_hints o goal sono cambiati rispetto al profilo precedente\n' +
+  '- profile_changed = false se hai solo incrementato visited_count o aggiornato last_categories senza cambiare il resto\n' +
+  '- Se il profilo precedente è null (prima visita), profile_changed = true\n\n' +
+  'Aggiorna il profilo in modo INCREMENTALE: non resettare, evolvi. ' +
+  'Se il profilo precedente è null, creane uno nuovo con valori iniziali ragionevoli. ' +
+  'Rispondi SOLO con il JSON. Niente altro testo, niente backtick, niente markdown.';
+
+app.post('/api/profile', async (req, res) => {
+  const profileId = `PROF-${++profileCounter}`;
+  const start = Date.now();
+
+  try {
+    const fetchSite = req.headers['sec-fetch-site'];
+    if (fetchSite && fetchSite !== 'same-origin') {
+      return res.status(403).json({ error: 'Accesso negato' });
+    }
+
+    const { intent, previous_intent, profile } = req.body;
+    if (!intent) {
+      return res.status(400).json({ error: 'Campo "intent" obbligatorio' });
+    }
+
+    logSep(`${profileId} — Aggiornamento profilo (async)`);
+    log(`[${profileId}] Intent: "${intent}"${previous_intent ? ` (precedente: "${previous_intent}")` : ''}`);
+    log(`[${profileId}] 📥 PROFILO IN INGRESSO: ${profile ? JSON.stringify(profile) : 'null (prima visita)'}`);
+
+    const transitionInfo = previous_intent
+      ? `\nTransizione: "${previous_intent}" → "${intent}" (analizza questo pattern per aggiornare behavior e ux_hints)`
+      : '';
+
+    const userMessage = profile
+      ? `Profilo attuale:\n${JSON.stringify(profile)}\n\nNuova pagina visitata: "${intent}"${transitionInfo}\n\nAggiorna il profilo.`
+      : `Prima visita dell'utente. Pagina visitata: "${intent}"\n\nCrea un profilo iniziale.`;
+
+    const reply = await callClaude(
+      [{ role: 'user', content: userMessage }],
+      profileId,
+      { system: PROFILE_SYSTEM_PROMPT, max_tokens: 300 }
+    );
+
+    const cleaned = stripCodeFence(reply);
+    let updatedProfile;
+    try {
+      updatedProfile = JSON.parse(cleaned);
+    } catch {
+      log(`[${profileId}] ⚠️ Parse JSON profilo fallito, tentativo recupero...`);
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try { updatedProfile = JSON.parse(jsonMatch[0]); } catch { }
+      }
+    }
+
+    if (!updatedProfile) {
+      log(`[${profileId}] ❌ Impossibile parsare il profilo, restituisco quello originale`);
+      return res.json({ profile: profile || null });
+    }
+
+    const elapsed = Date.now() - start;
+    const profileChanged = updatedProfile.profile_changed !== false; // default true per sicurezza
+    // Rimuovi il flag dal profilo (non serve nel cookie, è solo per il server)
+    delete updatedProfile.profile_changed;
+
+    log(`[${profileId}] 📤 PROFILO AGGIORNATO: ${JSON.stringify(updatedProfile)}`);
+    log(`[${profileId}] ${profileChanged ? '🔄 CAMBIO SIGNIFICATIVO → cache client verrà invalidata' : '➖ Cambio minimo → cache mantenuta'}`);
+    log(`[${profileId}] ✅ Completato in ${elapsed}ms`);
+
+    return res.json({ profile: updatedProfile, profile_changed: profileChanged });
+  } catch (err) {
+    const elapsed = Date.now() - start;
+    log(`[${profileId}] ❌ ERRORE dopo ${elapsed}ms: ${err.message}`);
+    console.error('Errore profilo:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ===========================================================================
+// 8. SEO ENGINE — SSR per crawler, Sitemap, Routing semantico
+// ===========================================================================
+
+// --- Bot detection ---
+const BOT_PATTERNS = [
+  'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
+  'yandexbot', 'facebookexternalhit', 'twitterbot', 'linkedinbot',
+  'whatsapp', 'telegrambot', 'applebot', 'semrushbot', 'ahrefsbot',
+  'mj12bot', 'rogerbot', 'embedly', 'quora link preview', 'showyoubot',
+  'outbrain', 'pinterest', 'developers.google.com/+/web/snippet',
+];
+
+function isBot(userAgent) {
+  if (!userAgent) return false;
+  const ua = userAgent.toLowerCase();
+  return BOT_PATTERNS.some(bot => ua.includes(bot));
+}
+
+// --- Slug ↔ Intent conversion ---
+function intentToSlug(intent) {
+  return intent
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // rimuovi accenti
+    .replace(/[^a-z0-9\s-]/g, '')                     // rimuovi caratteri speciali
+    .trim()
+    .replace(/\s+/g, '-')                              // spazi → trattini
+    .replace(/-+/g, '-');                               // trattini multipli → singolo
+}
+
+function slugToIntent(slug) {
+  return decodeURIComponent(slug).replace(/-/g, ' ').trim();
+}
+
+// --- SSR Cache (TTL 1 ora) ---
+const ssrCache = new Map();
+const SSR_CACHE_TTL = 60 * 60 * 1000; // 1 ora
+
+function getCachedSSR(slug) {
+  const entry = ssrCache.get(slug);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > SSR_CACHE_TTL) {
+    ssrCache.delete(slug);
+    return null;
+  }
+  return entry.html;
+}
+
+function setCachedSSR(slug, html) {
+  ssrCache.set(slug, { html, ts: Date.now() });
+}
+
+// --- SSR HTML wrapper ---
+function buildSSRPage(content, title, description, canonicalUrl) {
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${esc(title)}</title>
+  <meta name="description" content="${esc(description)}">
+  <link rel="canonical" href="${esc(canonicalUrl)}">
+  <meta property="og:title" content="${esc(title)}">
+  <meta property="og:description" content="${esc(description)}">
+  <meta property="og:url" content="${esc(canonicalUrl)}">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index, follow">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <main>${content}</main>
+  <footer style="text-align:center;padding:2rem;color:#666;font-size:0.75rem">
+    <a href="/">← Torna alla home</a>
+  </footer>
+</body>
+</html>`;
+}
+
+// --- Sitemap XML ---
+function buildSitemap(baseUrl) {
+  const urls = [];
+
+  // Homepage
+  urls.push({ loc: baseUrl + '/', priority: '1.0', changefreq: 'daily' });
+
+  // Prodotti dal catalogo
+  try {
+    const catalog = JSON.parse(contentMap.get('catalog.json') || '{}');
+    for (const cat of catalog.categories || []) {
+      if (cat.lines) {
+        for (const line of cat.lines) {
+          for (const p of line.products) {
+            const name = `${line.name} ${p.name}`;
+            urls.push({
+              loc: `${baseUrl}/prodotti/${intentToSlug(name)}`,
+              priority: p.is_bestseller ? '0.9' : '0.8',
+              changefreq: 'weekly',
+            });
+          }
+        }
+      } else {
+        for (const p of cat.products || []) {
+          urls.push({
+            loc: `${baseUrl}/prodotti/${intentToSlug(p.name)}`,
+            priority: p.is_bestseller ? '0.9' : '0.8',
+            changefreq: 'weekly',
+          });
+        }
+      }
+    }
+  } catch { }
+
+  // Ricette
+  for (const key of contentMap.keys()) {
+    if (key.startsWith('recipes/') && key !== 'recipes/index.md' && key.endsWith('.md')) {
+      const slug = key.replace('recipes/', '').replace('.md', '');
+      urls.push({
+        loc: `${baseUrl}/ricette/${slug}`,
+        priority: '0.7',
+        changefreq: 'monthly',
+      });
+    }
+  }
+
+  // Brand pages
+  urls.push({ loc: `${baseUrl}/chi-siamo`, priority: '0.6', changefreq: 'monthly' });
+  urls.push({ loc: `${baseUrl}/faq`, priority: '0.5', changefreq: 'monthly' });
+  urls.push({ loc: `${baseUrl}/mission`, priority: '0.5', changefreq: 'monthly' });
+  urls.push({ loc: `${baseUrl}/catalogo`, priority: '0.9', changefreq: 'weekly' });
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url>
+    <loc>${esc(u.loc)}</loc>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  return xml;
+}
+
+app.get('/sitemap.xml', (req, res) => {
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  res.set('Content-Type', 'application/xml');
+  res.send(buildSitemap(baseUrl));
+});
+
+// --- Catch-all route: SSR per bot, SPA fallback per utenti ---
+let ssrCounter = 0;
+
+// Pattern URL pericolosi — vengono bloccati PRIMA di arrivare all'LLM
+const BLOCKED_URL_PATTERNS = [
+  // Admin & auth
+  'admin', 'login', 'signin', 'signup', 'register', 'auth',
+  'dashboard', 'panel', 'console', 'terminal',
+  // CRUD & form
+  'edit', 'delete', 'remove', 'insert', 'update', 'modify',
+  'nuovo', 'nuova', 'crea', 'aggiungi', 'gestione', 'gestisci', 'manage',
+  'form', 'submit', 'save', 'salva',
+  // Config & dev
+  'config', 'settings', 'preferences', 'options',
+  'debug', 'test', 'dev', 'staging',
+  // API & data
+  'api', 'graphql', 'webhook',
+  'upload', 'download', 'export', 'import',
+  'database', 'sql', 'query', 'backup',
+  // Credenziali
+  'password', 'token', 'secret', 'key', 'credential',
+  // File system
+  '.env', 'server.js', 'node_modules', 'package.json',
+  // Legacy
+  'wp-admin', 'wp-login', 'phpmyadmin', 'cpanel',
+  // Business riservato
+  'partnership', 'fornitor', 'inventario', 'stock', 'fattur',
+  'contratt', 'margin', 'costi-produzione', 'interno',
+];
+
+function isBlockedURL(urlPath) {
+  const lower = urlPath.toLowerCase();
+  return BLOCKED_URL_PATTERNS.some(p => lower.includes(p));
+}
+
+app.get('*', async (req, res) => {
+  // Non intercettare file statici (hanno estensione)
+  if (path.extname(req.path)) return res.status(404).send('Not found');
+
+  // Blocca URL che tentano di accedere a funzionalità admin/pericolose
+  if (isBlockedURL(req.path)) {
+    log(`[SECURITY] URL bloccato: ${req.path}`);
+    return res.status(404).send('Not found');
+  }
+
+  const ua = req.get('user-agent') || '';
+
+  // Se NON è un bot → servi la SPA shell, il client-side JS gestirà il routing
+  if (!isBot(ua)) {
+    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+
+  // --- SSR per crawler ---
+  const ssrId = `SSR-${++ssrCounter}`;
+  const reqPath = req.path;
+
+  logSep(`${ssrId} — SSR per crawler`);
+  log(`[${ssrId}] Path: ${reqPath}`);
+  log(`[${ssrId}] Bot: ${ua.slice(0, 80)}`);
+
+  // Check cache
+  const cached = getCachedSSR(reqPath);
+  if (cached) {
+    log(`[${ssrId}] ✅ Cache HIT — servita pagina cachata`);
+    return res.send(cached);
+  }
+
+  // Converti path in intent
+  let intent;
+  if (reqPath === '/' || reqPath === '') {
+    intent = 'homepage catalogo completo';
+  } else {
+    // Rimuovi prefissi noti e converti in intent
+    const cleanPath = reqPath
+      .replace(/^\/prodotti\//, '')
+      .replace(/^\/ricette\//, 'ricetta ')
+      .replace(/^\//, '');
+    intent = slugToIntent(cleanPath);
+  }
+
+  log(`[${ssrId}] Intent dedotto: "${intent}"`);
+
+  try {
+    // Genera la pagina via LLM (senza profilo — pagina neutra per SEO)
+    const seoSystemPrompt =
+      'Sei il motore di rendering SSR di un sito web. Genera HTML per una pagina che verrà indicizzata da Google.\n' +
+      'REGOLE:\n' +
+      '1. Genera SOLO il contenuto HTML (no <html>, <head>, <body> — vengono aggiunti dal server)\n' +
+      '2. Usa classi Tailwind CSS\n' +
+      '3. Il contenuto deve essere ricco di testo semantico per SEO (headings, paragrafi, liste)\n' +
+      '4. Includi link interni con data-navigate per la navigazione\n' +
+      '5. NON generare pagine minimal: il contenuto deve essere sostanzioso\n' +
+      '6. Alla fine del tuo HTML, aggiungi un commento HTML con questo formato ESATTO:\n' +
+      '<!-- SEO:{"title":"Titolo pagina ottimizzato SEO, max 60 char","description":"Meta description accattivante, max 155 char"} -->';
+
+    const messages = [{ role: 'user', content: intent }];
+
+    // Usa il system prompt cachato + contesto SEO
+    const reply = await callClaude(messages, ssrId, {
+      system: systemPromptText + '\n\n' + seoSystemPrompt,
+      max_tokens: 8000,
+    });
+
+    let html = stripCodeFence(reply);
+
+    // Estrai meta tag SEO dal commento HTML
+    let title = intent.charAt(0).toUpperCase() + intent.slice(1);
+    let description = `Scopri ${intent} sul nostro sito.`;
+
+    const seoMatch = html.match(/<!--\s*SEO:\s*({[^}]+})\s*-->/);
+    if (seoMatch) {
+      try {
+        const seo = JSON.parse(seoMatch[1]);
+        if (seo.title) title = seo.title;
+        if (seo.description) description = seo.description;
+      } catch { }
+      // Rimuovi il commento SEO dall'HTML visibile
+      html = html.replace(/<!--\s*SEO:\s*{[^}]+}\s*-->/, '');
+    }
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const canonicalUrl = `${baseUrl}${reqPath}`;
+    const fullPage = buildSSRPage(html, title, description, canonicalUrl);
+
+    // Cacha la pagina SSR
+    setCachedSSR(reqPath, fullPage);
+
+    log(`[${ssrId}] ✅ Pagina SSR generata (${fullPage.length} char) — title: "${title}"`);
+    return res.send(fullPage);
+  } catch (err) {
+    log(`[${ssrId}] ❌ SSR ERRORE: ${err.message}`);
+    // Fallback: servi la SPA
+    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+});
+
 // ---------------------------------------------------------------------------
-// 7. Avvio
+// 9. Avvio
 // ---------------------------------------------------------------------------
 
 const PORT = process.env.PORT || 3000;
